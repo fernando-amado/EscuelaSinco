@@ -75,11 +75,19 @@ function Agregar(nombre, apellido, tdoc, ndoc) {
 			Tp_Id: 1
 		})
 	})
-		.then((response) => response.json())
-		.then((p) => {
-			llenarTablaAlumno(p);
-			swal ( "¡Transaccion Exitosa! " , "¡Se ha agregado un nuevo alumno! " , "success" );
-		});
+		.then((response) =>{ 
+			if(response.status==400)
+			{
+				swal ( "¡Transaccion Fallida! " ,"-Error el documento esta repetido \n -Campos Vacios", "error" );
+			}
+			else{
+				swal ( "¡Transaccion Exitosa! " , "¡Se ha agregado un nuevo alumno! " , "success" );
+				response.json().then((a)=>{
+					llenarTablaAlumno(a);
+				});
+			}
+
+		})
 }
 
 function AbrirEditar(id, nDoc, nombres, apellidos, tDoc, estado) {

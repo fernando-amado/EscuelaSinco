@@ -13,11 +13,14 @@ const btnEditar= document.getElementById("ButtonEditar")
 
 let idnotas=[]
 
-function listarSelect(url,input){
-    fetch(url)
+function listarSelect(alumnmo){
+    selectmateria.innerHTML =" "
+    fetch("https://localhost:44351/api/Personas/"+alumnmo)
     .then((data)=>data.json())
-    .then((notas)=>notas.forEach(nota=>{
-        llenarSelect(nota,input)
+    .then((notas)=>notas.forEach(materia=>{
+        if(materia.Id == alumnmo){
+        llenarSelect(materia,selectmateria)
+        }
     }))
 }
 
@@ -53,8 +56,7 @@ async function listarNotas() {
 }
 
 function llenarSelect(datos,input){
-   
-input.innerHTML += `<option value="${datos.Id}">${datos.Nombre}</option>`;
+input.innerHTML += `<option value="${datos.Materia_id}">${datos.Materia}</option>`;
     
 }
 
@@ -66,7 +68,7 @@ function llenarSelectPeriodo(datos,input){
 
 
 function llenarSelectAlumno(datos, input) {
-     if (datos.Tp_Id==1){
+     if (datos.Tp_Id==1 && datos.Activo){
 	input.innerHTML += `<option value="${datos.Id}">${datos.Nombres}</option>`;
      }
 }
@@ -206,10 +208,11 @@ btnEditar.addEventListener("click",()=>{
     }
     )
 
-
+selectestudiante.addEventListener('change', function(event){
+        listarSelect(event.target.value)
+    })
 listarNotas()
 listarSelectAlumno("https://localhost:44351/api/Personas/ConsultarTodo", selectestudiante);
-listarSelect("https://localhost:44351/api/Materias",selectmateria)
 listarSelectPeriodo("https://localhost:44351/api/Periodoes",selectPeriodo)
 listarSelectPeriodo("https://localhost:44351/api/Periodoes", periodoeditar)
 

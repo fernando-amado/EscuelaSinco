@@ -67,10 +67,17 @@ function Agregar(nombre,apellido,tdoc,ndoc,) {
           Tp_Id: 2
       })
   })
-      .then((response) => response.json())
-      .then((p) => {
-          llenarTablaProfesor(p)
-          swal ( "¡Transaccion Exitosa! " , "¡Se ha agregado un nuevo docente! " , "success" );
+      .then((response) => {
+        if(response.status==400)
+			{
+				swal ( "¡Transaccion Fallida! " ,"-Error el documento esta repetido \n -Campos Vacios", "error" );
+			}
+			else{
+				swal ( "¡Transaccion Exitosa! " , "¡Se ha agregado un nuevo alumno! " , "success" );
+				response.json().then((p)=>{
+					llenarTablaProfesor(p);
+				});
+			}
       });
 }
 

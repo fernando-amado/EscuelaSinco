@@ -142,9 +142,15 @@ namespace SSV2.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            db.Personas.Add(persona);
-            db.SaveChanges();
+            try
+            {
+                db.Personas.Add(persona);
+                db.SaveChanges();
+            }
+            catch (Exception e) {
+                return  BadRequest("ERROR");
+            }
+           
 
             return CreatedAtRoute("DefaultApi", new { id = persona.Id }, persona);
         }

@@ -47,7 +47,7 @@ function seleccionarDocente(select) {
 		.then((response) => response.json())
 		.then((personas) =>
 			personas.forEach((persona) => {
-				if (persona.Tp_Id == 1) {
+				if (persona.Tp_Id == 1 && persona.Activo) {
 					select.innerHTML += `<option value = ${persona.Id}>  ${persona.Nombres}  </option>`;
 				}
 			})
