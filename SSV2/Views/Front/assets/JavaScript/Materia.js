@@ -47,8 +47,8 @@ function Agregar(m) {
 		body: JSON.stringify({
 			Nombre: m
 		})
-	},)
-		.then((response) => response.json())
+	})
+		.then((response) => response.json())		
 		.then((data) => {
 			swal ( "¡Transaccion Exitosa! " , "¡Se ha agregado una nueva materia! " , "success" );
 			llenarTabla(data)});
@@ -62,6 +62,9 @@ function AbrirEditar(id, nombre) {
 
 
 function Editar(id, nombre) {
+	if (nombre == "" ) {
+		swal("¡Transaccion Fallida! ", "Campos Vacios", "error");
+	  } else {
 	fetch("https://localhost:44351/api/Materias/" + id, {
 		headers: {
 			Accept: "application/json",
@@ -80,6 +83,7 @@ function Editar(id, nombre) {
 	}),
 		limpiarDatos(),
 		CloseUpdate();
+	}
 }
 
 function Eliminar(id) {
