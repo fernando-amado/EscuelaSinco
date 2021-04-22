@@ -118,6 +118,7 @@ color: #bb2929;
     display: flex;
     justify-content: space-between;
     margin-bottom: 30px;
+    padding-top: 6%;
 }
 .contenedorInputs select{
     padding: 5px  5% ;
@@ -142,7 +143,7 @@ color: #bb2929;
 }
 .seccionTabla {
     position: absolute;
-    top: 50%;
+    top: 56%;
     left: 18%;
     width: 80%;
     overflow: scroll;
@@ -163,8 +164,8 @@ color: #bb2929;
     text-align: right;
 }
 #BuscarId{
-    width: 40%;
-    margin: 19.92px 0px;
+    width: 51%;
+    margin: 19.92px 155px;
     padding: 5px 10px;
     border-radius: 20px;
     margin-right: 72px;
@@ -187,20 +188,20 @@ color: #bb2929;
     border-radius: 5px;
 }
 .buttonEditar{
-    background-color: #FEA443;
+    background-color: #023859;
 }
 .buttonEliminar{
-    background-color: #D9544F;
+    background-color: #df150e;
 }
 th{
     font-size: 1.3vw;
 }
 .modalUpdate{
     background-color: #FFFFFF;
-    position: absolute;
-    min-width:30%;
-    top: 30%;
-    left:30%;
+    position: fixed;
+    min-width: 30%;
+    top: 26%;
+    left: 38%;
     box-shadow: 20px 20px 40px rgba(0, 0, 0, 0.7);
     border-radius: 10px;
     display: none;
@@ -219,7 +220,10 @@ th{
 }
 .cerrar{
     position: absolute;
-    right: 25px;
+    right: 5px;
+    top: 5px;
+    border-radius: 5px;
+    border-color: #f2f2f2;
 }
 .frmEditar{
     padding: 30px;
@@ -246,7 +250,7 @@ th{
 .guardarCambios{
     background-color: #023859;
     color: #f2f2f2;
-    width: 30%;
+    width: 50%;
     height: 50px;
 }
 #ButtonCloseEditar{
@@ -315,7 +319,16 @@ display: flex;
 flex-direction: column;
 }
 
-
+.modalUpdate{
+    background-color: #FFFFFF;
+    position: fixed;
+    min-width: 30%;
+    top: 19%;
+    left: 9%;
+    box-shadow: 20px 20px 40px rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    display: none;
+}
 
 
 

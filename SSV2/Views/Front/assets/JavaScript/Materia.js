@@ -31,8 +31,8 @@ function llenarTabla(m) {
 
 	nMateria.innerHTML += "<td>" + m.Nombre + "</td>";
 	nMateria.setAttribute("data-id", m.Id);
-	nMateria.innerHTML += `<td class="tdBoton "><button class="buttonEditar far fa-edit"onclick="AbrirEditar(${m.Id},'${m.Nombre}')">Editar</button>
-    <button class=" fas fa-trash-alt buttonEliminar" onclick="ConfirmarEliminar(${m.Id})">Eliminar</button></td>`;
+	nMateria.innerHTML += `<td class="tdBoton "><button class="buttonEditar "onclick="AbrirEditar(${m.Id},'${m.Nombre}')">Editar</button>
+    <button class="  buttonEliminar" onclick="ConfirmarEliminar(${m.Id})">Eliminar</button></td>`;
 	tabla.appendChild(nMateria);
 	inputNombre.value = "";
 }
@@ -78,8 +78,8 @@ function Editar(id, nombre) {
 	}).then(() => {
 		let tr = document.querySelector(`tr[data-id="${id}"]`);
 	
-		tr.innerHTML = `<td>${nombre}</td><td class="tdBoton "><button class="buttonEditar far fa-edit"onclick="AbrirEditar(${id},'${nombre}')">Editar</button>
-    <button class=" fas fa-trash-alt buttonEliminar" onclick="Eliminar(${id})">Eliminar</button></td>`;
+		tr.innerHTML = `<td>${nombre}</td><td class="tdBoton "><button class="buttonEditar "onclick="AbrirEditar(${id},'${nombre}')">Editar</button>
+    <button class=" fas  buttonEliminar" onclick="Eliminar(${id})">Eliminar</button></td>`;
 	}),
 		limpiarDatos(),
 		CloseUpdate();

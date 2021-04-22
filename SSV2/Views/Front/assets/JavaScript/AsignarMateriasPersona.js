@@ -13,89 +13,103 @@ const arrayMateria = [];
 
 
 function seleccionarMateria(select) {
-  fetch("https://localhost:44351/api/Materias")
-    .then((response) => response.json())
-    .then((materias) =>
-      materias.forEach((materia) => {
-        select.innerHTML += `<option value = ${materia.Id}>  ${materia.Nombre}  </option>`;
-      })
-    );
+	fetch("https://localhost:44351/api/Materias")
+		.then((response) => response.json())
+		.then((materias) =>
+			materias.forEach((materia) => {
+				select.innerHTML += `<option value = ${materia.Id}>  ${materia.Nombre}  </option>`;
+			})
+		);
 }
+
 function seleccionarPersona(select) {
-  fetch("https://localhost:44351/api/Personas/ConsultarTodo")
-    .then((response) => response.json())
-    .then((personas) =>
-      personas.forEach((persona) => {
-        if (persona.Tp_Id == 2 && htmlLocation == "http://127.0.0.1:5500/views/asignar_materia_profesor.html") 
-        {
-          select.innerHTML += `<option value = ${persona.Id}>  ${persona.Nombres}  </option>`;
-        }else if(persona.Tp_Id == 1 && htmlLocation == "http://127.0.0.1:5500/views/asignar_materia_alumno.html"){
-          select.innerHTML += `<option value = ${persona.Id}>  ${persona.Nombres}  </option>`; 
-        }
-      })
-    );
+	fetch("https://localhost:44351/api/Personas/ConsultarTodo")
+		.then((response) => response.json())
+		.then((personas) =>
+			personas.forEach((persona) => {
+				if (persona.Tp_Id == 2 && htmlLocation == "http://127.0.0.1:5500/views/asignar_materia_profesor.html") {
+					select.innerHTML += `<option value = ${persona.Id}>  ${persona.Nombres}  </option>`;
+				} else if (persona.Tp_Id == 1 && htmlLocation == "http://127.0.0.1:5500/views/asignar_materia_alumno.html") {
+					select.innerHTML += `<option value = ${persona.Id}>  ${persona.Nombres}  </option>`;
+				}
+			})
+		);
 }
 async function consultar() {
-  await fetch("https://localhost:44351/api/PersonaMaterias")
-    .then((response) => response.json())
-    .then((materias) => {
-      llenarTabla(materias);
-    })
-    .catch((error) => error);
+	await fetch("https://localhost:44351/api/PersonaMaterias")
+		.then((response) => response.json())
+		.then((materias) => {
+			llenarTabla(materias);
+		})
+		.catch((error) => error);
 }
+
 function llenarTabla(materias) {
-  html = " ";
-  materias.forEach((materia) => {
-    arrayMateria.push(materia)
-    if (
-      materia.TipoPersona == 2 &&
-      htmlLocation ==
-        "http://127.0.0.1:5500/views/asignar_materia_profesor.html"
-    ) {
-      html += `<tr id="tr" data-id="${materia.Id}">
+	html = " ";
+	materias.forEach((materia) => {
+		arrayMateria.push(materia)
+		if (
+			materia.TipoPersona == 2 &&
+			htmlLocation ==
+			"http://127.0.0.1:5500/views/asignar_materia_profesor.html"
+		) {
+			html += `<tr id="tr" data-id="${materia.Id}">
           <td>${materia.NombrePersona}  ${materia.ApellidoPersona}</td>
           <td>${materia.Materia}</td>
           <td class="tdBoton "><button class="buttonEditar far fa-edit"onclick="AbrirEditar('${materia.Id}','${materia.IdPersona}', '${materia.IdMateria}')">Editar</button>
     	  <button class=" fas fa-trash-alt buttonEliminar" onclick="ConfirmarEliminar(${materia.Id})">Eliminar</button></td>
           </tr>`;
-          tabla.innerHTML = html;
-    } else if(materia.TipoPersona == 1 && htmlLocation == "http://127.0.0.1:5500/views/asignar_materia_alumno.html"){
-      html += `<tr id="tr" data-id="${materia.Id}">
+			tabla.innerHTML = html;
+		} else if (materia.TipoPersona == 1 && htmlLocation == "http://127.0.0.1:5500/views/asignar_materia_alumno.html") {
+			html += `<tr id="tr" data-id="${materia.Id}">
           <td>${materia.NombrePersona}  ${materia.ApellidoPersona}</td>
           <td>${materia.Materia}</td>
           <td class="tdBoton "><button class="buttonEditar far fa-edit"onclick="AbrirEditar('${materia.Id}','${materia.IdPersona}', '${materia.IdMateria}')">Editar</button>
     	  <button class=" fas fa-trash-alt buttonEliminar" onclick="ConfirmarEliminar(${materia.Id})">Eliminar</button></td>
           </tr>`;
-      tabla.innerHTML = html;
-    }
-  });
+			tabla.innerHTML = html;
+		}
+	});
 }
+
 function Agregar(Persona, Materia) {
 	fetch("https://localhost:44351/api/PersonaMaterias", {
-		headers: {
-			Accept: "application/json",
-			"Content-Type": "application/json"
-		},
-		method: "POST",
-		body: JSON.stringify({
-			Persona_Id: Persona,
-			Materia_Id: Materia,
-			Notas_Materias_Id: null
+			headers: {
+				Accept: "application/json",
+				"Content-Type": "application/json"
+			},
+			method: "POST",
+			body: JSON.stringify({
+				Persona_Id: Persona,
+				Materia_Id: Materia,
+				Notas_Materias_Id: null
+			})
 		})
-	})
-		.then((response) => response.json())
-		.then((data) => {
-			swal ( "¡Transaccion Exitosa! " , "¡Se ha asigando la materia al profesor! " , "success" );
-			consultar(data)}, limpiarDatos());
-	nombrePersona.value = "";
-	nombreMateria.value = "";
+
+
+		.then((response) => {
+			if (response.status ==400) {
+				swal("¡Transaccion Fallida! ", "Campos Vacios, Seleccione un campos para asignar", "error");
+			} else {
+				swal("¡Transaccion Exitosa! ", "¡Se ha asigando la materia correspondiente! ", "success");
+				response.json().then((data) => {
+					consultar(data)
+
+				}, limpiarDatos());
+				nombrePersona.value = "";
+				nombreMateria.value = "";
+			}
+
+		})
 }
+
 function AbrirEditar(Id, persona, Materia) {
 	OpenUpdate();
 	idMateriaPersona.value = Id;
 	personaEditar.value = persona;
 	MateriaEditar.value = Materia;
 }
+
 function Editar(id, Persona, Materia) {
 	fetch("https://localhost:44351/api/PersonaMaterias/" + id, {
 		headers: {
@@ -110,9 +124,13 @@ function Editar(id, Persona, Materia) {
 		})
 	}).then((data) => {
 		consultar(data);
+		swal("¡Transaccion Exitosa! ", "¡Se ha actualizado! ", "success");
+
+
 	})
-		CloseUpdate();
+	CloseUpdate();
 }
+
 function Eliminar(id) {
 	ConfirmarEliminar();
 	fetch("https://localhost:44351/api/PersonaMaterias/" + id, {
@@ -132,40 +150,45 @@ function Eliminar(id) {
 
 	});
 }
-function ConfirmarEliminar(id){
+
+function ConfirmarEliminar(id) {
 	swal({
-		title: "Esta seguro de eliminar el alumno?",
-		text: "No podra recuperar la información del alumno si lo elimina",
-		icon: "warning",
-		buttons: true,
-		dangerMode: true,
-	  })
-	  .then((willDelete) => {
-		if (willDelete) {
-			Eliminar(id);
-		  swal("El maestro ha eliminado la asignaición correctamente", {
-			icon: "success",
-		  });
-		} else {
-		  swal("No se elimino el maestro");
-		}
-	  });
+			title: "Esta seguro de eliminar el alumno?",
+			text: "No podra recuperar la información del alumno si lo elimina",
+			icon: "warning",
+			buttons: true,
+			dangerMode: true,
+		})
+		.then((willDelete) => {
+			if (willDelete) {
+				Eliminar(id);
+				swal("El maestro ha eliminado la asignaición correctamente", {
+					icon: "success",
+				});
+			} else {
+				swal("No se elimino el maestro");
+			}
+		});
 }
-function validarRepeticion(idP,idM){
-  console.log("funcion sirve");
-  (arrayMateria.some(personaMateria => ((personaMateria.IdPersona == idP) && (personaMateria.IdMateria == idM))) == true) ? 
-  alert('no puedes agregar esta persona porque se repite')
-  : Agregar(nombrePersona.value, nombreMateria.value);
+
+function validarRepeticion(idP, idM) {
+
+	(arrayMateria.some(personaMateria => ((personaMateria.IdPersona == idP) &&
+	 (personaMateria.IdMateria == idM))) == true) ?
+
+	swal("¡Transaccion Fallida! ", "-No puedes agregar este Profesor porque ya tiene asignada una materia", "error"): 
+	Agregar(nombrePersona.value, nombreMateria.value);
+
 }
+
 consultar();
 seleccionarPersona(nombrePersona);
 seleccionarMateria(nombreMateria);
 seleccionarPersona(personaEditar);
 seleccionarMateria(MateriaEditar);
 boton.addEventListener("click", () => {
-  validarRepeticion(nombrePersona.value, nombreMateria.value)
+	validarRepeticion(nombrePersona.value, nombreMateria.value)
 });
 btnEditarPersona.addEventListener("click", () => {
-	Editar(idMateriaDocente.value, DocenteEditar.value, MateriaEditar.value);
+	Editar(idMateriaPersona.value, personaEditar.value, MateriaEditar.value);
 });
-
