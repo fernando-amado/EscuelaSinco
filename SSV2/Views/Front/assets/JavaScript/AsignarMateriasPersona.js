@@ -83,12 +83,17 @@ function Agregar(Persona, Materia) {
 			Notas_Materias_Id: null
 		})
 	})
-		.then((response) => response.json())
-		.then((data) => {
-			swal ( "¡Transaccion Exitosa! " , "¡Se ha asigando la materia al profesor! " , "success" );
-			consultar(data)}, limpiarDatos());
-	nombrePersona.value = "";
-	nombreMateria.value = "";
+		.then((response) => {
+			if(response.status == 400){
+			swal("¡Transaccion Fallida! " , "¡Verifique que los campos esten completos! " , "error")
+		}else{
+			response.json().then((data) => {
+				swal ( "¡Transaccion Exitosa! " , "¡Se ha asigando la materia al profesor! " , "success" );
+				consultar(data)}, limpiarDatos())
+				nombrePersona.value = "";
+				nombreMateria.value = "";
+		}
+	})	
 }
 function AbrirEditar(Id, persona, Materia) {
 	OpenUpdate();

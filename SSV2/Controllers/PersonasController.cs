@@ -164,11 +164,16 @@ namespace SSV2.Controllers
             {
                 return NotFound();
             }
+            try {
+                db.Personas.Remove(persona);
+                db.SaveChanges();
+                return Ok(persona);
+            }
+            catch (Exception e) {
+                return BadRequest("Error Persona asiganada a materia");
+            }
+            
 
-            db.Personas.Remove(persona);
-            db.SaveChanges();
-
-            return Ok(persona);
         }
 
         protected override void Dispose(bool disposing)
