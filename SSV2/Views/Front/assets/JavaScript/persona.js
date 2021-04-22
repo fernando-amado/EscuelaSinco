@@ -125,30 +125,34 @@ function AbrirEditar(id, nDoc, nombres, apellidos, tDoc, estado) {
 }
 
 function Editar(id, nDoc, nombres, apellidos, tDoc, estado) {
-	fetch("https://localhost:44351/api/Personas/" + id, {
-		headers: {
-			Accept: "application/json",
-			"Content-Type": "application/json"
-		},
-		method: "PUT",
-		body: JSON.stringify({
-			Id: id,
-			Nombres: nombres,
-			Apellidos: apellidos,
-			Tdoc_Id: parseInt(tDoc),
-			NDoc: nDoc,
-			Activo: estado == "1" ? true : false,
-			Tp_Id: `${persona.TipoPersona}`
-		})
-	})
-		.then((p) => {
-			swal ( "¡Transaccion Exitosa! " , "¡Se ha actualizado el alumno! " , "success" );
-			location.reload();
-		})
-		.catch((error) => {
-			console.error(error);
-		});
-	CloseUpdate();
+	if (nombre == "" || apellidos == "" || tDoc == "" || nDoc == "" || estado == "") {
+		swal("¡Transaccion Fallida! ", "Diligencie todos los campos", "error");
+	} else {
+		fetch("https://localhost:44351/api/Personas/" + id, {
+				headers: {
+					Accept: "application/json",
+					"Content-Type": "application/json"
+				},
+				method: "PUT",
+				body: JSON.stringify({
+					Id: id,
+					Nombres: nombres,
+					Apellidos: apellidos,
+					Tdoc_Id: parseInt(tDoc),
+					NDoc: nDoc,
+					Activo: estado == "1" ? true : false,
+					Tp_Id: ("http://127.0.0.1:5500/views/alumnos.html") ? 1 : 2;
+				})
+			})
+			.then((p) => {
+				swal("¡Transaccion Exitosa! ", "¡Se ha actualizado el alumno! ", "success");
+				location.reload();
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+		CloseUpdate();
+	}
 }
 
 function Eliminar(id) {
@@ -177,8 +181,8 @@ function Eliminar(id) {
 
 function ConfirmarEliminar(id){
 	swal({
-		title: "Esta seguro de eliminar el alumno?",
-		text: "No podra recuperar la información del alumno si lo elimina y por favor verifique que la persona no tenga una materia asiganda",
+		title: "Esta seguro de eliminar esta persona?",
+		text: "No podra recuperar la información de esta persona si lo elimina y por favor verifique que la persona no tenga una materia asiganda",
 		icon: "warning",
 		buttons: true,
 		dangerMode: true,
@@ -186,11 +190,11 @@ function ConfirmarEliminar(id){
 	  .then((willDelete) => {
 		if (willDelete) {
 			Eliminar(id);
-		  swal("El alumnmo ha sido eliminado correctamente", {
+		  swal("La persona ha sido eliminado correctamente", {
 			icon: "success",
 		  });
 		} else {
-		  swal("No se elimino el alumno");
+		  swal("No se elimino la persona");
 		}
 	  });
 }

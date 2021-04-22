@@ -80,24 +80,28 @@ function AbrirEditar(id, nombre) {
 }
 
 function Editar(id, nombre) {
-  fetch("https://localhost:44351/api/Materias/" + id, {
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    method: "PUT",
-    body: JSON.stringify({
-      Id: parseInt(id),
-      Nombre: nombre,
-    }),
-  }).then(() => {
-    let tr = document.querySelector(`tr[data-id="${id}"]`);
-
-    tr.innerHTML = `<td>${nombre}</td><td class="tdBoton "><button class="buttonEditar far fa-edit"onclick="AbrirEditar(${id},'${nombre}')">Editar</button>
+	if (nombre == "" ) {
+		swal("¡Transaccion Fallida! ", "Campos Vacios", "error");
+	  } else {
+	fetch("https://localhost:44351/api/Materias/" + id, {
+		headers: {
+			Accept: "application/json",
+			"Content-Type": "application/json"
+		},
+		method: "PUT",
+		body: JSON.stringify({
+			Id: parseInt(id),
+			Nombre: nombre
+		})
+	}).then(() => {
+		let tr = document.querySelector(`tr[data-id="${id}"]`);
+	
+		tr.innerHTML = `<td>${nombre}</td><td class="tdBoton "><button class="buttonEditar far fa-edit"onclick="AbrirEditar(${id},'${nombre}')">Editar</button>
     <button class=" fas fa-trash-alt buttonEliminar" onclick="Eliminar(${id})">Eliminar</button></td>`;
-  }),
-    limpiarDatos(),
-    CloseUpdate();
+	}),
+		limpiarDatos(),
+		CloseUpdate();
+	}
 }
 
 function Eliminar(id) {
